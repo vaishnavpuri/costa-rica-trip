@@ -302,7 +302,7 @@
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <section class="page-section cover visible" data-page="0">
+    <section class="page-section cover visible" data-page="0" id="page0">
         <div class="page-content cover-content">
             <h1>🌴 A Costa Rican Adventure 🎂</h1>
             <p>An Itinerary for the Birthday Celebration</p>
@@ -311,18 +311,18 @@
             <div class="table-of-contents">
                 <h2>Table of Contents</h2>
                 <ol>
-                    <li><a onclick="scrollToPage(1)">Arrival & Recovery</a></li>
-                    <li><a onclick="scrollToPage(2)">The Birthday Adventure</a></li>
-                    <li><a onclick="scrollToPage(3)">Beach, Kayak & Spa</a></li>
-                    <li><a onclick="scrollToPage(4)">Departure</a></li>
-                    <li><a onclick="scrollToPage(5)">The Complete Packing List</a></li>
-                    <li><a onclick="scrollToPage(6)">Appendix: Resort Guide</a></li>
+                    <li><a href="#page1" onclick="handleLinkClick(event, 1)">Arrival & Recovery</a></li>
+                    <li><a href="#page2" onclick="handleLinkClick(event, 2)">The Birthday Adventure</a></li>
+                    <li><a href="#page3" onclick="handleLinkClick(event, 3)">Beach, Kayak & Spa</a></li>
+                    <li><a href="#page4" onclick="handleLinkClick(event, 4)">Departure</a></li>
+                    <li><a href="#page5" onclick="handleLinkClick(event, 5)">The Complete Packing List</a></li>
+                    <li><a href="#page6" onclick="handleLinkClick(event, 6)">Appendix: Resort Guide</a></li>
                 </ol>
             </div>
         </div>
     </section>
 
-    <section class="page-section day1" data-page="1">
+    <section class="page-section day1" data-page="1" id="page1">
         <div class="page-content">
             <div class="day-header">Chapter 1: Arrival & Recovery</div>
             <div class="time-blocks-container">
@@ -404,7 +404,7 @@
         </div>
     </section>
 
-    <section class="page-section day2" data-page="2">
+    <section class="page-section day2" data-page="2" id="page2">
         <div class="page-content">
             <div class="day-header">Chapter 2: The Birthday Adventure</div>
             <div class="time-blocks-container">
@@ -427,7 +427,7 @@
         </div>
     </section>
 
-    <section class="page-section day3" data-page="3">
+    <section class="page-section day3" data-page="3" id="page3">
         <div class="page-content">
             <div class="day-header">Chapter 3: Beach, Kayak & Spa</div>
             <div class="time-blocks-container">
@@ -451,7 +451,7 @@
         </div>
     </section>
 
-    <section class="page-section day4" data-page="4">
+    <section class="page-section day4" data-page="4" id="page4">
         <div class="page-content">
             <div class="day-header">Chapter 4: Departure</div>
             <div class="time-blocks-container">
@@ -472,7 +472,7 @@
         </div>
     </section>
 
-    <section class="page-section packing" data-page="5">
+    <section class="page-section packing" data-page="5" id="page5">
         <div class="page-content">
             <div class="day-header">Chapter 5: The Complete Packing List</div>
             <div class="packing-grid">
@@ -491,7 +491,7 @@
         </div>
     </section>
 
-    <section class="page-section info" data-page="6">
+    <section class="page-section info" data-page="6" id="page6">
         <div class="page-content">
             <div class="day-header">Appendix: Resort Guide</div>
             <div class="packing-grid">
@@ -514,13 +514,23 @@
         let currentPage = 0;
         const totalPages = 7;
 
+        // Scrolls to a specific page number
         function scrollToPage(pageNum) {
             const pages = document.querySelectorAll('.page-section');
             if (pages[pageNum]) {
                 pages[pageNum].scrollIntoView({ behavior: 'smooth' });
             }
         }
+        
+        // New function to handle clicks from the Table of Contents
+        function handleLinkClick(event, pageNum) {
+            // Prevent the browser's default jump-to-anchor behavior
+            event.preventDefault();
+            // Use our smooth scroll function instead
+            scrollToPage(pageNum);
+        }
 
+        // Observer to detect which page is visible for animations and progress bar
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
         const pageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -537,6 +547,7 @@
         document.querySelectorAll('.page-section').forEach(section => {
             pageObserver.observe(section);
         });
+
     </script>
 </body>
 </html>
