@@ -32,6 +32,7 @@
             color: white;
             padding: 30px 20px;
             text-align: center;
+            position: relative;
         }
         
         header h1 {
@@ -44,41 +45,159 @@
             opacity: 0.95;
         }
         
-        nav {
-            background: #2d3748;
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        nav ul {
-            list-style: none;
+        /* Hamburger Menu */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: #4a5568;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
-        nav a {
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: #2d3748;
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            padding: 80px 20px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .sidebar-header h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar nav ul {
+            list-style: none;
+        }
+        
+        .sidebar nav a {
             color: white;
             text-decoration: none;
             padding: 15px 20px;
             display: block;
             transition: background 0.3s;
+            border-bottom: 1px solid #4a5568;
         }
         
-        nav a:hover, nav a.active {
+        .sidebar nav a:hover {
             background: #4a5568;
+        }
+
+        .sidebar nav .sub-item a {
+            padding-left: 40px;
+            font-size: 0.9em;
+            background-color: #3a475a;
+        }
+        
+        .sidebar nav a.active {
+            background: #4a5568;
+            border-left: 4px solid #667eea;
+        }
+        
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            z-index: 998;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
         .content {
             padding: 20px;
         }
         
+        /* Color Legend at top */
+        .color-legend {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .color-legend h3 {
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e0;
+        }
+        
         .day-section {
             margin-bottom: 40px;
-            scroll-margin-top: 60px;
+            scroll-margin-top: 20px;
         }
         
         .day-header {
@@ -161,12 +280,12 @@
             color: #22543d;
             border-left: 4px solid #48bb78;
         }
-        
+
         .info-section {
             background: #f7fafc;
             padding: 20px;
             border-radius: 8px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
         
         .info-section h3 {
@@ -183,42 +302,9 @@
             margin-bottom: 5px;
         }
         
-        .quick-links {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4a5568;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            display: none;
-        }
-        
-        .quick-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 5px;
-        }
-        
-        @media (min-width: 768px) {
-            .quick-links {
-                display: block;
-            }
-        }
-        
         @media (max-width: 600px) {
             header h1 {
                 font-size: 1.5em;
-            }
-            
-            nav ul {
-                flex-direction: column;
-            }
-            
-            nav a {
-                padding: 12px;
-                border-bottom: 1px solid #4a5568;
             }
             
             .time-block {
@@ -237,15 +323,38 @@
             padding: 20px;
             margin-top: 40px;
         }
-        
-        .highlight {
-            background: yellow;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
     </style>
 </head>
 <body>
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>🌴 Quick Navigation</h3>
+            <p>Jump to any section</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#day1">✈️ Wed Sept 10</a></li>
+                <li><a href="#day2">🎂 Thu Sept 11</a></li>
+                <li><a href="#day3">🏖️ Fri Sept 12</a></li>
+                <li><a href="#day4">👋 Sat Sept 13</a></li>
+                <li><a href="#what-to-wear">👕 What to Wear</a></li>
+                <li class="sub-item"><a href="#wear-men">› Men</a></li>
+                <li class="sub-item"><a href="#wear-women">› Women</a></li>
+                <li><a href="#packing">🎒 Packing Essentials</a></li>
+                <li><a href="#resort-tips">📍 Resort Tips</a></li>
+                <li><a href="#numbers">📞 Important Numbers</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
     <div class="container">
         <header>
             <h1>🌴 Costa Rica Birthday Adventure 🎂</h1>
@@ -253,18 +362,29 @@
             <p>Occidental Papagayo Adults-Only Resort • Guanacaste</p>
         </header>
         
-        <nav>
-            <ul>
-                <li><a href="#day1">Wed Sept 10</a></li>
-                <li><a href="#day2">🎂 Thu Sept 11</a></li>
-                <li><a href="#day3">Fri Sept 12</a></li>
-                <li><a href="#day4">Sat Sept 13</a></li>
-                <li><a href="#info">Info & Tips</a></li>
-            </ul>
-        </nav>
-        
         <div class="content">
-            <!-- DAY 1 -->
+            <div class="color-legend">
+                <h3>📖 Itinerary Color Key</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fef5e7;"></div>
+                        <span><strong>Meals</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fce4ec;"></div>
+                        <span><strong>Activities</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e3f2fd;"></div>
+                        <span><strong>Tours</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e8f5e9;"></div>
+                        <span><strong>Spa/Wellness</strong></span>
+                    </div>
+                </div>
+            </div>
+            
             <div id="day1" class="day-section">
                 <div class="day-header">Day 1: Wednesday, Sept 10 - Arrival & Recovery</div>
                 
@@ -384,7 +504,6 @@
                 </div>
             </div>
             
-            <!-- DAY 2 - BIRTHDAY -->
             <div id="day2" class="day-section">
                 <div class="day-header birthday-header">🎉 Day 2: Thursday, Sept 11 - BIRTHDAY ADVENTURE! 🎂</div>
                 
@@ -477,7 +596,6 @@
                 </div>
             </div>
             
-            <!-- DAY 3 -->
             <div id="day3" class="day-section">
                 <div class="day-header">Day 3: Friday, Sept 12 - Beach, Kayak & Spa</div>
                 
@@ -574,7 +692,6 @@
                 </div>
             </div>
             
-            <!-- DAY 4 -->
             <div id="day4" class="day-section">
                 <div class="day-header">Day 4: Saturday, Sept 13 - Departure</div>
                 
@@ -611,45 +728,110 @@
                 </div>
             </div>
             
-            <!-- INFO SECTION -->
-            <div id="info" class="day-section">
+            <div id="what-to-wear" class="day-section">
                 <div class="day-header">Essential Information</div>
                 
-                <div class="info-section">
-                    <h3>🎯 Free Resort Activities</h3>
+                <div id="wear-men" class="info-section">
+                    <h3>👔 What to Wear - MEN</h3>
                     <ul>
-                        <li><strong>Water:</strong> Kayaking, Snorkeling, Water Aerobics</li>
-                        <li><strong>Sports:</strong> Tennis, Beach Volleyball, Pool Volleyball</li>
-                        <li><strong>Indoor:</strong> Chess & Board Games (lobby)</li>
-                        <li><strong>Note:</strong> All equipment included free!</li>
+                        <li><strong>⚠️ 5 TYPES OF FOOTWEAR (all essential!):</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>🥾 Hiking boots - for volcano tour on rough terrain</li>
+                                <li>🩴 Water shoes - rocky beach areas (left side)</li>
+                                <li>👟 Tennis/athletic shoes - sports activities</li>
+                                <li>🩴 Flip-flops - pool/casual resort walking</li>
+                                <li>👞 Loafers/boat shoes - dinner restaurants</li>
+                            </ul>
+                        </li>
+                        <li><strong>Swimwear:</strong> 3-4 swim trunks (quick-dry preferred)</li>
+                        <li><strong>Bottoms:</strong> 
+                            <ul style="margin-top: 5px;">
+                                <li>3-4 quick-dry shorts</li>
+                                <li>2 khaki/linen pants for dinners</li>
+                                <li>1 pair hiking pants (convertible to shorts)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tops:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>5-6 moisture-wicking t-shirts</li>
+                                <li>2-3 collared shirts (restaurants require)</li>
+                                <li>2 tank tops for beach/pool</li>
+                                <li>1 light long-sleeve (sun protection)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Outerwear:</strong> Light rain jacket, sun shirt/rash guard</li>
                     </ul>
                 </div>
                 
-                <div class="info-section">
-                    <h3>☔ Weather Pattern (September)</h3>
+                <div id="wear-women" class="info-section">
+                    <h3>👗 What to Wear - WOMEN</h3>
                     <ul>
-                        <li>Morning: Clear, 75-82°F (perfect for activities)</li>
-                        <li>Afternoon: Rain 2-5 PM daily</li>
-                        <li>Evening: Clear after rain</li>
-                        <li>Humidity: 86% - stay hydrated!</li>
+                        <li><strong>⚠️ 5 TYPES OF FOOTWEAR (all essential!):</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>🥾 Hiking boots - volcano tour on uneven ground</li>
+                                <li>🩴 Water shoes - rocky beach protection</li>
+                                <li>👟 Tennis shoes - activities & sports</li>
+                                <li>🩴 Comfortable sandals - casual resort wear</li>
+                                <li>👠 Dressy sandals/wedges - dinner restaurants</li>
+                            </ul>
+                        </li>
+                        <li><strong>Swimwear:</strong> 3-4 swimsuits + 2 cover-ups/sarongs</li>
+                        <li><strong>Bottoms:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>3-4 shorts (quick-dry material)</li>
+                                <li>2 capri/lightweight pants</li>
+                                <li>1 hiking pants/leggings</li>
+                                <li>2 skirts for evening</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tops:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>5-6 tank tops/t-shirts (breathable fabric)</li>
+                                <li>2-3 nice blouses for dinner</li>
+                                <li>1 long-sleeve sun shirt</li>
+                            </ul>
+                        </li>
+                        <li><strong>Dresses:</strong> 3-4 sundresses (dinner & daywear)</li>
+                        <li><strong>CRUCIAL:</strong> Light cardigan/pashmina (A/C is FREEZING in restaurants!)</li>
                     </ul>
                 </div>
                 
-                <div class="info-section">
-                    <h3>🎒 Don't Forget to Pack</h3>
+                <div id="packing" class="info-section">
+                    <h3>🎒 Packing Essentials (Complete List)</h3>
                     <ul>
-                        <li>Reef-safe sunscreen (SPF 50+)</li>
-                        <li>Water shoes for rocky beach</li>
-                        <li>Light rain jacket</li>
-                        <li>Bug spray (30% DEET)</li>
-                        <li>Waterproof phone case</li>
-                        <li>2-3 swimsuits</li>
-                        <li>Dressy-casual outfit for dinners</li>
-                        <li>Small bills for tipping ($1-2 USD)</li>
+                        <li><strong>Sun & Bug Protection:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>Reef-safe sunscreen SPF 50+ (2 bottles)</li>
+                                <li>After-sun aloe vera gel</li>
+                                <li>Bug spray with 30% DEET</li>
+                                <li>Sunglasses + backup pair</li>
+                                <li>Wide-brim hat or cap</li>
+                            </ul>
+                        </li>
+                        <li><strong>Gear & Equipment:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>Waterproof phone case</li>
+                                <li>Dry bag for boat/water activities</li>
+                                <li>Small day pack for tours</li>
+                                <li>Reusable water bottle</li>
+                                <li>Snorkel mask (if you prefer your own)</li>
+                                <li>Beach bag</li>
+                                <li>Portable charger/power bank</li>
+                            </ul>
+                        </li>
+                        <li><strong>Money & Documents:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>$40-50 in small bills ($1s and $5s for tips)</li>
+                                <li>Credit cards (notify bank of travel)</li>
+                                <li>Passport + photocopy</li>
+                                <li>Travel insurance info</li>
+                            </ul>
+                        </li>
+                        <li><strong>Rain Gear:</strong> Light rain jacket, small umbrella, ziplock bags for electronics</li>
                     </ul>
                 </div>
-                
-                <div class="info-section">
+
+                <div id="resort-tips" class="info-section">
                     <h3>📍 Resort Tips</h3>
                     <ul>
                         <li>Request Building 1 (closest to everything)</li>
@@ -661,7 +843,7 @@
                     </ul>
                 </div>
                 
-                <div class="info-section">
+                <div id="numbers" class="info-section">
                     <h3>📞 Important Numbers</h3>
                     <ul>
                         <li>Resort: +506 2690 8000</li>
@@ -678,16 +860,34 @@
         </footer>
     </div>
     
-    <div class="quick-links">
-        <a href="#day1">D1</a> | 
-        <a href="#day2">🎂</a> | 
-        <a href="#day3">D3</a> | 
-        <a href="#day4">D4</a> | 
-        <a href="#top">↑</a>
-    </div>
-    
     <script>
-        // Simple smooth scrolling for navigation
+        // Hamburger menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        
+        function toggleMenu() {
+            menuToggle.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking a link
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Use a small timeout to allow scroll to start before closing menu
+                setTimeout(() => {
+                    if (sidebar.classList.contains('active')) {
+                         toggleMenu();
+                    }
+                }, 100);
+            });
+        });
+        
+        // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -698,20 +898,24 @@
             });
         });
         
-        // Highlight current day in navigation
+        // Highlight current section in sidebar
         window.addEventListener('scroll', () => {
             let current = '';
-            const sections = document.querySelectorAll('.day-section');
+            const sections = document.querySelectorAll('.day-section, .info-section');
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
                 if (scrollY >= (sectionTop - 100)) {
                     current = section.getAttribute('id');
                 }
             });
+
+            // Special handling for the grouped "what-to-wear" sections
+            if (current === 'wear-men' || current === 'wear-women') {
+                current = 'what-to-wear';
+            }
             
-            document.querySelectorAll('nav a').forEach(link => {
+            document.querySelectorAll('.sidebar nav a').forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href').slice(1) === current) {
                     link.classList.add('active');
