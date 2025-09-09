@@ -3,391 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Costa Rica Birthday Trip - Sept 10-13, 2025</title>
-    <meta name="description" content="Our family trip to Occidental Papagayo Resort in Costa Rica">
+    <title>A Costa Rican Adventure - An Itinerary</title>
+    <meta name="description" content="An interactive book-style itinerary for our family trip to Costa Rica.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-        }
-        
-        header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-        
-        /* Hamburger Menu */
-        .menu-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            background: #4a5568;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100vh;
-            background: #2d3748;
-            transition: left 0.3s ease;
-            z-index: 999;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        }
-        
-        .sidebar.active {
-            left: 0;
-        }
-        
-        .sidebar-header {
-            padding: 80px 20px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .sidebar-header h3 {
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar nav ul {
-            list-style: none;
-        }
-        
-        .sidebar nav a {
-            color: white;
-            text-decoration: none;
-            padding: 15px 20px;
-            display: block;
-            transition: background 0.3s;
-            border-bottom: 1px solid #4a5568;
-        }
-        
-        .sidebar nav a:hover {
-            background: #4a5568;
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
         }
 
-        .sidebar nav .sub-item a {
-            padding-left: 40px;
-            font-size: 0.9em;
-            background-color: #3a475a;
+        body {
+            font-family: 'Lora', serif;
+            overflow-x: hidden;
+            background: #3a3a3a;
         }
-        
-        .sidebar nav a.active {
-            background: #4a5568;
-            border-left: 4px solid #667eea;
-        }
-        
-        /* Overlay */
-        .overlay {
+
+        /* Page Progress Indicator */
+        .progress-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
+            height: 5px;
+            background: rgba(0,0,0,0.2);
+            z-index: 10000;
+        }
+
+        .progress-bar {
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-            z-index: 998;
+            background: #c09a6b;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(192, 154, 107, 0.7);
         }
-        
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .content {
-            padding: 20px;
-        }
-        
-        /* Color Legend at top */
-        .color-legend {
-            background: white;
-            border: 2px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        
-        .color-legend h3 {
-            margin-bottom: 10px;
-            color: #2d3748;
-        }
-        
-        .legend-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .legend-item {
+
+        /* Full Page Sections */
+        .page-section {
+            min-height: 100vh;
+            position: relative;
+            scroll-snap-align: start;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #F1E9D2;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAARlJREFUaIHt1c1qwkAYhuF3/0c7S3flFN3s5uDmrnB3dozjxk1eRl2gTpJ2q93MD4GQHURb2/m9f94dCQAAAAAAAAAAAAAAAAAAAACATy2zvWyXt2V/2d5tX/aXLSv7yfZte7K92y5tX3bXtiv7yPZte7L9t71ZDvBf9rPaBT7Z3my/9md7s/3aT+1nO8Cv2fdoF/g9+4V2gf+0l2gX+Hl7k3aBH7dPaBf4/L1Nu8CH22u0C3y8vUu7wLfbW7QLfLK92X7tT/Zm+7Wf2s92gJ+z79Eu8H/2C+0C/2kvaBf4eXuTdoEft09oF/j8vU27wIfba7QLfLy9S7vAt9tbtAt8sr3Zfu1P9mb7tZ/azwEAAAAAAAAAAAAAAAAAAAD4T3wBlhHSmN9eMvYAAAAASUVORK5CYII=');
         }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid #cbd5e0;
+
+        .page-section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        .day-section {
-            margin-bottom: 40px;
-            scroll-margin-top: 20px;
+
+        /* Page Content Container */
+        .page-content {
+            max-width: 900px;
+            width: 90%;
+            background: #fdfaf6;
+            border-radius: 5px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid #e0d8c6;
         }
-        
-        .day-header {
-            background: #4a5568;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+
+        .page-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .page-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .page-content::-webkit-scrollbar-thumb {
+            background: #c09a6b;
+            border-radius: 10px;
+        }
+
+        /* Cover Page & Table of Contents */
+        .cover-content {
+            text-align: center;
+            background: transparent;
+            box-shadow: none;
+            border: none;
+        }
+
+        .cover-content h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #4a4a4a;
+        }
+
+        .cover-content p {
             font-size: 1.3em;
+            margin: 5px 0;
+            color: #6b6b6b;
+            font-style: italic;
+        }
+
+        .table-of-contents {
+            margin-top: 40px;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .table-of-contents h2 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #333;
+            border-bottom: 2px solid #c09a6b;
+            padding-bottom: 10px;
+        }
+
+        .table-of-contents ol {
+            list-style: none;
+            counter-reset: chapter;
+            padding-left: 0;
+        }
+        .table-of-contents li {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            counter-increment: chapter;
+        }
+
+        .table-of-contents a {
+            text-decoration: none;
+            color: #5a4b3a;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .table-of-contents a:hover {
+            color: #c09a6b;
+        }
+        .table-of-contents li::before {
+            content: "Chapter " counter(chapter) ": ";
+            font-weight: bold;
+            color: #8a7a68;
         }
         
-        .birthday-header {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        /* Day Header Styles */
+        .day-header {
+            color: #333;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0d8c6;
+            margin-bottom: 30px;
+            font-size: 2em;
+            text-align: center;
         }
-        
+
+        /* Time Block Styles */
         .time-block {
             display: flex;
             margin-bottom: 15px;
             padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
-            border-left: 4px solid #cbd5e0;
+            border-radius: 5px;
+            border-left: 4px solid #c09a6b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
         }
         
-        .time-block.meal {
-            background: #fef5e7;
-            border-left-color: #f6ad55;
+        .time-block:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
         }
-        
-        .time-block.activity {
-            background: #fce4ec;
-            border-left-color: #fc8181;
-        }
-        
-        .time-block.tour {
-            background: #e3f2fd;
-            border-left-color: #4299e1;
-        }
-        
-        .time-block.spa {
-            background: #e8f5e9;
-            border-left-color: #48bb78;
-        }
-        
+        .time-block.meal { border-left-color: #d98c00; background: #fff8e1; }
+        .time-block.activity { border-left-color: #008080; background: #e0f2f1; }
+        .time-block.tour { border-left-color: #4169e1; background: #e3f2fd; }
+        .time-block.spa { border-left-color: #556b2f; background: #f1f8e9; }
+
         .time {
             font-weight: bold;
-            color: #2d3748;
-            min-width: 80px;
+            min-width: 90px;
             margin-right: 20px;
+            font-size: 1.1em;
+            color: #333;
         }
-        
-        .activity-details {
-            flex: 1;
-        }
-        
-        .activity-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .activity-note {
-            color: #718096;
-            font-size: 0.9em;
-        }
-        
+        .activity-details { color: #555; }
+        .activity-title { font-weight: 700; margin-bottom: 5px; font-size: 1.1em; color: #333; }
+        .activity-note { font-size: 0.95em; }
+
+        /* Alert Styles */
         .alert {
             padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
+            border-radius: 5px;
+            margin: 25px 0;
+            border-left: 4px solid;
         }
-        
-        .alert-rain {
-            background: #fed7d7;
-            color: #742a2a;
-            border-left: 4px solid #fc8181;
-        }
-        
-        .alert-tip {
-            background: #c6f6d5;
-            color: #22543d;
-            border-left: 4px solid #48bb78;
+        .alert-rain { background: #e3f2fd; color: #2e6c9c; border-left-color: #4169e1; }
+        .alert-tip { background: #f1f8e9; color: #4b5d28; border-left-color: #556b2f; }
+
+        /* Packing List Grid */
+        .packing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
 
-        .info-section {
-            background: #f7fafc;
+        .packing-card {
+            background: #fdfdfd;
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
         }
-        
-        .info-section h3 {
-            color: #2d3748;
-            margin-bottom: 10px;
+        .packing-card:hover {
+            border-color: #c09a6b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
-        .info-section ul {
-            margin-left: 20px;
-            color: #4a5568;
+
+        .packing-card h3 {
+            color: #5a4b3a;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
-        
-        .info-section li {
-            margin-bottom: 5px;
+        .packing-card ul { list-style: none; padding-left: 0; }
+        .packing-card li { padding: 5px 0; position: relative; padding-left: 20px; color: #555;}
+        .packing-card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #c09a6b;
+            font-weight: bold;
         }
-        
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.5em;
-            }
-            
-            .time-block {
-                flex-direction: column;
-            }
-            
-            .time {
-                margin-bottom: 10px;
-            }
-        }
-        
-        footer {
-            background: #2d3748;
-            color: white;
-            text-align: center;
-            padding: 20px;
+
+        /* Page Navigation Buttons */
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
             margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0d8c6;
+        }
+        .page-turner {
+            background: transparent;
+            border: 1px solid #c09a6b;
+            color: #5a4b3a;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Lora', serif;
+            font-size: 1em;
+        }
+        .page-turner:hover {
+            background: #c09a6b;
+            color: white;
+        }
+        .page-turner.hidden {
+            visibility: hidden;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 0.9em;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Animations */
+        @keyframes slideInFromLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .time-blocks-container, .packing-grid {
+            animation: slideInFromLeft 0.8s ease-out 0.3s both;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .cover-content h1 { font-size: 2em; }
+            .page-content { padding: 20px; }
+            .time-block { flex-direction: column; }
+            .time { margin-bottom: 10px; }
+            .packing-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <button class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-    
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>🌴 Quick Navigation</h3>
-            <p>Jump to any section</p>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#day1">✈️ Wed Sept 10</a></li>
-                <li><a href="#day2">🎂 Thu Sept 11</a></li>
-                <li><a href="#day3">🏖️ Fri Sept 12</a></li>
-                <li><a href="#day4">👋 Sat Sept 13</a></li>
-                <li><a href="#what-to-wear">👕 What to Wear</a></li>
-                <li class="sub-item"><a href="#wear-men">› Men</a></li>
-                <li class="sub-item"><a href="#wear-women">› Women</a></li>
-                <li><a href="#packing">🎒 Packing Essentials</a></li>
-                <li><a href="#resort-tips">📍 Resort Tips</a></li>
-                <li><a href="#numbers">📞 Important Numbers</a></li>
-            </ul>
-        </nav>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
-    
-    <div class="overlay" id="overlay"></div>
-    
-    <div class="container">
-        <header>
-            <h1>🌴 Costa Rica Birthday Adventure 🎂</h1>
-            <p><strong>September 10-13, 2025</strong></p>
-            <p>Occidental Papagayo Adults-Only Resort • Guanacaste</p>
-        </header>
-        
-        <div class="content">
-            <div class="color-legend">
-                <h3>📖 Itinerary Color Key</h3>
-                <div class="legend-items">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #fef5e7;"></div>
-                        <span><strong>Meals</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #fce4ec;"></div>
-                        <span><strong>Activities</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #e3f2fd;"></div>
-                        <span><strong>Tours</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #e8f5e9;"></div>
-                        <span><strong>Spa/Wellness</strong></span>
-                    </div>
-                </div>
-            </div>
+
+    <section class="page-section cover visible" data-page="0">
+        <div class="page-content cover-content">
+            <h1>🌴 A Costa Rican Adventure 🎂</h1>
+            <p>An Itinerary for the Birthday Celebration</p>
+            <p>September 10th - 13th, 2025</p>
             
-            <div id="day1" class="day-section">
-                <div class="day-header">Day 1: Wednesday, Sept 10 - Arrival & Recovery</div>
-                
+            <div class="table-of-contents">
+                <h2>Table of Contents</h2>
+                <ol>
+                    <li><a onclick="scrollToPage(1)">Arrival & Recovery</a></li>
+                    <li><a onclick="scrollToPage(2)">The Birthday Adventure</a></li>
+                    <li><a onclick="scrollToPage(3)">Beach, Kayak & Spa</a></li>
+                    <li><a onclick="scrollToPage(4)">Departure</a></li>
+                    <li><a onclick="scrollToPage(5)">The Complete Packing List</a></li>
+                    <li><a onclick="scrollToPage(6)">Appendix: Resort Guide</a></li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section day1" data-page="1">
+        <div class="page-content">
+            <div class="day-header">Chapter 1: Arrival & Recovery</div>
+            <div class="time-blocks-container">
                 <div class="time-block">
                     <div class="time">6:20 AM</div>
                     <div class="activity-details">
@@ -395,7 +333,6 @@
                         <div class="activity-note">Clear customs, shuttle at 7:30 AM</div>
                     </div>
                 </div>
-                
                 <div class="time-block">
                     <div class="time">8:15 AM</div>
                     <div class="activity-details">
@@ -403,15 +340,13 @@
                         <div class="activity-note">Check-in starts at 3 PM - store luggage, explore resort</div>
                     </div>
                 </div>
-                
                 <div class="time-block meal">
                     <div class="time">8:30 AM</div>
                     <div class="activity-details">
                         <div class="activity-title">Breakfast at Main Buffet</div>
-                        <div class="activity-note">Open until 10:30 AM</div>
+                        <div class="activity-note">Open until 10:30 AM - Try the tropical fruits!</div>
                     </div>
                 </div>
-                
                 <div class="time-block activity">
                     <div class="time">10:00 AM</div>
                     <div class="activity-details">
@@ -419,509 +354,218 @@
                         <div class="activity-note">Water aerobics, explore tennis courts, pool volleyball</div>
                     </div>
                 </div>
-                
                 <div class="time-block">
                     <div class="time">11:00 AM</div>
                     <div class="activity-details">
-                        <div class="activity-title">📌 IMPORTANT: Book Friday Kayaks</div>
+                        <div class="activity-title">IMPORTANT: Book Friday Kayaks</div>
                         <div class="activity-note">Reserve 2 kayaks at water sports office for Friday 8 AM</div>
                     </div>
                 </div>
-                
-                <div class="time-block">
-                    <div class="time">12:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Parents Arrive at LIR Airport</div>
-                        <div class="activity-note">Will arrive at resort around 1:00 PM</div>
-                    </div>
-                </div>
-                
                 <div class="time-block meal">
                     <div class="time">1:00 PM</div>
                     <div class="activity-details">
-                        <div class="activity-title">Lunch Together & Parents Check-in</div>
-                        <div class="activity-note">Main buffet, help parents get oriented</div>
+                        <div class="activity-title">Lunch & Parents Check-in</div>
+                        <div class="activity-note">Parents arrive from airport, main buffet lunch</div>
                     </div>
                 </div>
-                
                 <div class="alert alert-rain">
-                    🌧️ <strong>2:00-5:00 PM:</strong> Daily afternoon rain expected - perfect for indoor activities!
+                    <strong>Rainy Season Note:</strong> Expect daily afternoon rain from 2-5 PM. Perfect for indoor plans!
                 </div>
-                
                 <div class="time-block spa">
                     <div class="time">2:30 PM</div>
                     <div class="activity-details">
                         <div class="activity-title">Spa Visit & Bookings</div>
-                        <div class="activity-note">Book Friday spa treatments, play board games in lobby</div>
+                        <div class="activity-note">Book Friday treatments, play board games in lobby</div>
                     </div>
                 </div>
-                
-                <div class="time-block">
-                    <div class="time">3:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Official Check-in Time</div>
-                        <div class="activity-note">Get room keys, unpack, rest</div>
-                    </div>
-                </div>
-                
                 <div class="time-block">
                     <div class="time">5:00 PM</div>
                     <div class="activity-details">
                         <div class="activity-title">Post-Rain Beach Walk</div>
-                        <div class="activity-note">Explore beach, maybe play tennis</div>
+                        <div class="activity-note">Explore the beach as the weather clears for the evening</div>
                     </div>
                 </div>
-                
-                <div class="time-block">
-                    <div class="time">6:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Sunset Cocktails</div>
-                        <div class="activity-note">Lobby bar has the best views!</div>
-                    </div>
-                </div>
-                
                 <div class="time-block meal">
                     <div class="time">7:00 PM</div>
                     <div class="activity-details">
                         <div class="activity-title">Welcome Dinner</div>
-                        <div class="activity-note">Main buffet - make reservations for Italian (Thu) & Asian (Fri)</div>
+                        <div class="activity-note">Main buffet - make reservations for Thu & Fri specialty dining.</div>
                     </div>
                 </div>
-                
-                <div class="time-block">
-                    <div class="time">9:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Early Rest</div>
-                        <div class="activity-note">Recover from red-eye flights</div>
-                    </div>
-                </div>
-                
                 <div class="alert alert-tip">
-                    ✅ <strong>Wednesday To-Do List:</strong><br>
-                    • Book kayaks for Friday 8 AM<br>
-                    • Book spa for Friday afternoon<br>
-                    • Make dinner reservations for Thursday & Friday
+                    <strong>Day 1 Checklist:</strong> Book kayaks, schedule spa appointments, and make dinner reservations for the next two nights.
                 </div>
             </div>
-            
-            <div id="day2" class="day-section">
-                <div class="day-header birthday-header">🎉 Day 2: Thursday, Sept 11 - BIRTHDAY ADVENTURE! 🎂</div>
-                
-                <div class="time-block meal">
-                    <div class="time">6:30 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Quick Birthday Breakfast</div>
-                        <div class="activity-note">Light meal before tour</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">7:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">🚐 Tour Pickup - Rincon de la Vieja Volcano</div>
-                        <div class="activity-note">Meet in lobby. Bring: swimsuit, towel, sunscreen, bug spray, water, camera</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">9:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">National Park Hike Begins</div>
-                        <div class="activity-note">2-hour moderate hike, see volcanic activity, wildlife</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">11:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Oropendola Waterfall</div>
-                        <div class="activity-note">Swimming in beautiful blue lagoon!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">12:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Birthday Lunch</div>
-                        <div class="activity-note">Traditional Costa Rican buffet included in tour</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">2:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Rio Negro Hot Springs</div>
-                        <div class="activity-note">Natural thermal pools - so relaxing!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block tour">
-                    <div class="time">3:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Volcanic Mud Bath</div>
-                        <div class="activity-note">Natural spa treatment - great for skin!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">5:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Return to Resort</div>
-                        <div class="activity-note">Quick shower and change for dinner</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">6:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Birthday Sunset Cocktails</div>
-                        <div class="activity-note">Celebrate at lobby bar!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block meal">
-                    <div class="time">7:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">🎂 BIRTHDAY DINNER</div>
-                        <div class="activity-note">Italian restaurant (reserved) - tell them it's a birthday!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">9:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Birthday Entertainment</div>
-                        <div class="activity-note">Live music or disco (opens 9:30 PM)</div>
-                    </div>
-                </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(0)">← Table of Contents</button>
+                <button class="page-turner" onclick="scrollToPage(2)">Next Chapter →</button>
             </div>
-            
-            <div id="day3" class="day-section">
-                <div class="day-header">Day 3: Friday, Sept 12 - Beach, Kayak & Spa</div>
-                
-                <div class="time-block">
-                    <div class="time">6:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Sunrise Beach Walk</div>
-                        <div class="activity-note">Best photos, coolest temperatures</div>
-                    </div>
-                </div>
-                
-                <div class="time-block meal">
-                    <div class="time">7:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Leisurely Breakfast</div>
-                        <div class="activity-note">Try gallo pinto and tropical fruits</div>
-                    </div>
-                </div>
-                
-                <div class="time-block activity">
-                    <div class="time">8:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">🚣 KAYAKING ADVENTURE</div>
-                        <div class="activity-note">Pre-booked Wednesday - calm morning waters perfect!</div>
-                    </div>
-                </div>
-                
-                <div class="time-block activity">
-                    <div class="time">9:30 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">🤿 Snorkeling</div>
-                        <div class="activity-note">Equipment free at water sports office</div>
-                    </div>
-                </div>
-                
-                <div class="time-block activity">
-                    <div class="time">10:30 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Morning Activities</div>
-                        <div class="activity-note">Choose: Beach volleyball, water aerobics, or tennis</div>
-                    </div>
-                </div>
-                
-                <div class="time-block meal">
-                    <div class="time">12:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Lunch at Pool Restaurant</div>
-                        <div class="activity-note">Stay in swimwear, lighter fare</div>
-                    </div>
-                </div>
-                
-                <div class="alert alert-rain">
-                    🌧️ <strong>2:00-5:00 PM:</strong> Rain time = Spa time!
-                </div>
-                
-                <div class="time-block spa">
-                    <div class="time">2:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Spa Treatments</div>
-                        <div class="activity-note">Pre-booked massages/facials</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">3:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Rainy Day Activities</div>
-                        <div class="activity-note">Chess/board games in lobby or spa facilities</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">5:30 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Evening Tennis or Volleyball</div>
-                        <div class="activity-note">Cooler temps, less crowded</div>
-                    </div>
-                </div>
-                
-                <div class="time-block meal">
-                    <div class="time">7:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Farewell Dinner</div>
-                        <div class="activity-note">Asian restaurant or main buffet</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">10:00 PM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Pack for Departure</div>
-                        <div class="activity-note">Organize luggage for morning</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="day4" class="day-section">
-                <div class="day-header">Day 4: Saturday, Sept 13 - Departure</div>
-                
-                <div class="time-block meal">
-                    <div class="time">6:30 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Final Breakfast</div>
-                        <div class="activity-note">Light meal before travel</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">8:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Check-Out</div>
-                        <div class="activity-note">Settle any charges</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">9:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">🚐 Depart for Airport</div>
-                        <div class="activity-note">35-minute drive to LIR</div>
-                    </div>
-                </div>
-                
-                <div class="time-block">
-                    <div class="time">11:00 AM</div>
-                    <div class="activity-details">
-                        <div class="activity-title">✈️ Flights Depart</div>
-                        <div class="activity-note">Safe travels home!</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="what-to-wear" class="day-section">
-                <div class="day-header">Essential Information</div>
-                
-                <div id="wear-men" class="info-section">
-                    <h3>👔 What to Wear - MEN</h3>
-                    <ul>
-                        <li><strong>⚠️ 5 TYPES OF FOOTWEAR (all essential!):</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>🥾 Hiking boots - for volcano tour on rough terrain</li>
-                                <li>🩴 Water shoes - rocky beach areas (left side)</li>
-                                <li>👟 Tennis/athletic shoes - sports activities</li>
-                                <li>🩴 Flip-flops - pool/casual resort walking</li>
-                                <li>👞 Loafers/boat shoes - dinner restaurants</li>
-                            </ul>
-                        </li>
-                        <li><strong>Swimwear:</strong> 3-4 swim trunks (quick-dry preferred)</li>
-                        <li><strong>Bottoms:</strong> 
-                            <ul style="margin-top: 5px;">
-                                <li>3-4 quick-dry shorts</li>
-                                <li>2 khaki/linen pants for dinners</li>
-                                <li>1 pair hiking pants (convertible to shorts)</li>
-                            </ul>
-                        </li>
-                        <li><strong>Tops:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>5-6 moisture-wicking t-shirts</li>
-                                <li>2-3 collared shirts (restaurants require)</li>
-                                <li>2 tank tops for beach/pool</li>
-                                <li>1 light long-sleeve (sun protection)</li>
-                            </ul>
-                        </li>
-                        <li><strong>Outerwear:</strong> Light rain jacket, sun shirt/rash guard</li>
-                    </ul>
-                </div>
-                
-                <div id="wear-women" class="info-section">
-                    <h3>👗 What to Wear - WOMEN</h3>
-                    <ul>
-                        <li><strong>⚠️ 5 TYPES OF FOOTWEAR (all essential!):</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>🥾 Hiking boots - volcano tour on uneven ground</li>
-                                <li>🩴 Water shoes - rocky beach protection</li>
-                                <li>👟 Tennis shoes - activities & sports</li>
-                                <li>🩴 Comfortable sandals - casual resort wear</li>
-                                <li>👠 Dressy sandals/wedges - dinner restaurants</li>
-                            </ul>
-                        </li>
-                        <li><strong>Swimwear:</strong> 3-4 swimsuits + 2 cover-ups/sarongs</li>
-                        <li><strong>Bottoms:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>3-4 shorts (quick-dry material)</li>
-                                <li>2 capri/lightweight pants</li>
-                                <li>1 hiking pants/leggings</li>
-                                <li>2 skirts for evening</li>
-                            </ul>
-                        </li>
-                        <li><strong>Tops:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>5-6 tank tops/t-shirts (breathable fabric)</li>
-                                <li>2-3 nice blouses for dinner</li>
-                                <li>1 long-sleeve sun shirt</li>
-                            </ul>
-                        </li>
-                        <li><strong>Dresses:</strong> 3-4 sundresses (dinner & daywear)</li>
-                        <li><strong>CRUCIAL:</strong> Light cardigan/pashmina (A/C is FREEZING in restaurants!)</li>
-                    </ul>
-                </div>
-                
-                <div id="packing" class="info-section">
-                    <h3>🎒 Packing Essentials (Complete List)</h3>
-                    <ul>
-                        <li><strong>Sun & Bug Protection:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>Reef-safe sunscreen SPF 50+ (2 bottles)</li>
-                                <li>After-sun aloe vera gel</li>
-                                <li>Bug spray with 30% DEET</li>
-                                <li>Sunglasses + backup pair</li>
-                                <li>Wide-brim hat or cap</li>
-                            </ul>
-                        </li>
-                        <li><strong>Gear & Equipment:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>Waterproof phone case</li>
-                                <li>Dry bag for boat/water activities</li>
-                                <li>Small day pack for tours</li>
-                                <li>Reusable water bottle</li>
-                                <li>Snorkel mask (if you prefer your own)</li>
-                                <li>Beach bag</li>
-                                <li>Portable charger/power bank</li>
-                            </ul>
-                        </li>
-                        <li><strong>Money & Documents:</strong>
-                            <ul style="margin-top: 5px;">
-                                <li>$40-50 in small bills ($1s and $5s for tips)</li>
-                                <li>Credit cards (notify bank of travel)</li>
-                                <li>Passport + photocopy</li>
-                                <li>Travel insurance info</li>
-                            </ul>
-                        </li>
-                        <li><strong>Rain Gear:</strong> Light rain jacket, small umbrella, ziplock bags for electronics</li>
-                    </ul>
-                </div>
-
-                <div id="resort-tips" class="info-section">
-                    <h3>📍 Resort Tips</h3>
-                    <ul>
-                        <li>Request Building 1 (closest to everything)</li>
-                        <li>Restaurants close ON TIME - arrive early!</li>
-                        <li>Book kayaks day before</li>
-                        <li>Beach: Swim on RIGHT side (left is rocky)</li>
-                        <li>Use golf cart shuttle for hills</li>
-                        <li>All drinks & tips included</li>
-                    </ul>
-                </div>
-                
-                <div id="numbers" class="info-section">
-                    <h3>📞 Important Numbers</h3>
-                    <ul>
-                        <li>Resort: +506 2690 8000</li>
-                        <li>Emergency: 911</li>
-                        <li>WiFi available in rooms & lobby</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="page-number">Page 1</div>
         </div>
-        
-        <footer>
-            <p>Have an amazing trip! 🌴 Pura Vida! 🎂</p>
-            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Created with ❤️ for our Costa Rica adventure</p>
-        </footer>
-    </div>
-    
-    <script>
-        // Hamburger menu functionality
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        
-        function toggleMenu() {
-            menuToggle.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-        
-        menuToggle.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-        
-        // Close menu when clicking a link
-        document.querySelectorAll('.sidebar nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                // Use a small timeout to allow scroll to start before closing menu
-                setTimeout(() => {
-                    if (sidebar.classList.contains('active')) {
-                         toggleMenu();
-                    }
-                }, 100);
-            });
-        });
-        
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-        
-        // Highlight current section in sidebar
-        window.addEventListener('scroll', () => {
-            let current = '';
-            const sections = document.querySelectorAll('.day-section, .info-section');
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollY >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
+    </section>
 
-            // Special handling for the grouped "what-to-wear" sections
-            if (current === 'wear-men' || current === 'wear-women') {
-                current = 'what-to-wear';
+    <section class="page-section day2" data-page="2">
+        <div class="page-content">
+            <div class="day-header">Chapter 2: The Birthday Adventure</div>
+            <div class="time-blocks-container">
+                <div class="time-block meal"><div class="time">6:30 AM</div><div class="activity-details"><div class="activity-title">Quick Birthday Breakfast</div><div class="activity-note">A light meal before the big tour.</div></div></div>
+                <div class="time-block tour"><div class="time">7:00 AM</div><div class="activity-details"><div class="activity-title">Tour Pickup - Rincon de la Vieja</div><div class="activity-note">Meet in lobby with swimsuit, towel, sunscreen, camera.</div></div></div>
+                <div class="time-block tour"><div class="time">9:00 AM</div><div class="activity-details"><div class="activity-title">National Park Hike</div><div class="activity-note">2-hour moderate hike to see volcanic activity and wildlife.</div></div></div>
+                <div class="time-block tour"><div class="time">11:00 AM</div><div class="activity-details"><div class="activity-title">Oropendola Waterfall</div><div class="activity-note">A refreshing swim in a beautiful blue lagoon!</div></div></div>
+                <div class="time-block tour"><div class="time">12:30 PM</div><div class="activity-details"><div class="activity-title">Birthday Lunch</div><div class="activity-note">Enjoy a traditional Costa Rican buffet included with the tour.</div></div></div>
+                <div class="time-block tour"><div class="time">2:00 PM</div><div class="activity-details"><div class="activity-title">Rio Negro Hot Springs</div><div class="activity-note">Relax and unwind in natural thermal pools.</div></div></div>
+                <div class="time-block tour"><div class="time">3:00 PM</div><div class="activity-details"><div class="activity-title">Volcanic Mud Bath</div><div class="activity-note">A natural spa treatment that's great for your skin!</div></div></div>
+                <div class="time-block"><div class="time">5:30 PM</div><div class="activity-details"><div class="activity-title">Return to Resort</div><div class="activity-note">Time for a quick shower and change for dinner.</div></div></div>
+                <div class="time-block meal"><div class="time">7:30 PM</div><div class="activity-details"><div class="activity-title">BIRTHDAY DINNER</div><div class="activity-note">At the reserved Italian restaurant - let them know it's a birthday!</div></div></div>
+                <div class="time-block"><div class="time">9:00 PM</div><div class="activity-details"><div class="activity-title">Birthday Entertainment</div><div class="activity-note">Live music or disco (opens 9:30 PM).</div></div></div>
+            </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(1)">← Previous Chapter</button>
+                <button class="page-turner" onclick="scrollToPage(3)">Next Chapter →</button>
+            </div>
+            <div class="page-number">Page 2</div>
+        </div>
+    </section>
+
+    <section class="page-section day3" data-page="3">
+        <div class="page-content">
+            <div class="day-header">Chapter 3: Beach, Kayak & Spa</div>
+            <div class="time-blocks-container">
+                <div class="time-block"><div class="time">6:00 AM</div><div class="activity-details"><div class="activity-title">Sunrise Beach Walk</div><div class="activity-note">The best time for photos and cooler temperatures.</div></div></div>
+                <div class="time-block meal"><div class="time">7:00 AM</div><div class="activity-details"><div class="activity-title">Leisurely Breakfast</div><div class="activity-note">Try gallo pinto and other local specialties.</div></div></div>
+                <div class="time-block activity"><div class="time">8:00 AM</div><div class="activity-details"><div class="activity-title">KAYAKING ADVENTURE</div><div class="activity-note">Using our pre-booked kayaks in the calm morning water.</div></div></div>
+                <div class="time-block activity"><div class="time">9:30 AM</div><div class="activity-details"><div class="activity-title">Snorkeling</div><div class="activity-note">Equipment is free at the water sports office.</div></div></div>
+                <div class="time-block activity"><div class="time">10:30 AM</div><div class="activity-details"><div class="activity-title">Beach Activities</div><div class="activity-note">Choose between beach volleyball, water aerobics, or tennis.</div></div></div>
+                <div class="time-block meal"><div class="time">12:30 PM</div><div class="activity-details"><div class="activity-title">Lunch at the Pool Restaurant</div><div class="activity-note">Stay in your swimwear for some lighter fare.</div></div></div>
+                <div class="alert alert-rain"><strong>Rainy Afternoon (2-5 PM):</strong> Perfect timing for our spa appointments!</div>
+                <div class="time-block spa"><div class="time">2:30 PM</div><div class="activity-details"><div class="activity-title">Spa Treatments</div><div class="activity-note">Enjoy our pre-booked massages and facials.</div></div></div>
+                <div class="time-block"><div class="time">5:30 PM</div><div class="activity-details"><div class="activity-title">Evening Sports</div><div class="activity-note">Play tennis or volleyball in cooler temperatures.</div></div></div>
+                <div class="time-block meal"><div class="time">7:00 PM</div><div class="activity-details"><div class="activity-title">Farewell Dinner</div><div class="activity-note">At the reserved Asian restaurant or the main buffet.</div></div></div>
+                <div class="time-block"><div class="time">10:00 PM</div><div class="activity-details"><div class="activity-title">Pack for Departure</div><div class="activity-note">Organize luggage for an easy morning.</div></div></div>
+            </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(2)">← Previous Chapter</button>
+                <button class="page-turner" onclick="scrollToPage(4)">Next Chapter →</button>
+            </div>
+            <div class="page-number">Page 3</div>
+        </div>
+    </section>
+
+    <section class="page-section day4" data-page="4">
+        <div class="page-content">
+            <div class="day-header">Chapter 4: Departure</div>
+            <div class="time-blocks-container">
+                <div class="time-block meal"><div class="time">6:30 AM</div><div class="activity-details"><div class="activity-title">Final Breakfast</div><div class="activity-note">A light meal before traveling.</div></div></div>
+                <div class="time-block"><div class="time">8:00 AM</div><div class="activity-details"><div class="activity-title">Check-Out</div><div class="activity-note">Settle any charges at the front desk.</div></div></div>
+                <div class="time-block"><div class="time">9:00 AM</div><div class="activity-details"><div class="activity-title">Airport Shuttle</div><div class="activity-note">A 35-minute drive to LIR airport.</div></div></div>
+                <div class="time-block"><div class="time">11:00 AM</div><div class="activity-details"><div class="activity-title">Flights Home</div><div class="activity-note">Safe travels! Pura Vida!</div></div></div>
+            </div>
+            <div class="alert alert-tip" style="margin-top: 40px;">
+                <strong>🌴 Thank you for an amazing trip!</strong><br>
+                Don't forget to share your photos and memories!
+            </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(3)">← Previous Chapter</button>
+                <button class="page-turner" onclick="scrollToPage(5)">Next Chapter →</button>
+            </div>
+            <div class="page-number">Page 4</div>
+        </div>
+    </section>
+
+    <section class="page-section packing" data-page="5">
+        <div class="page-content">
+            <div class="day-header">Chapter 5: The Complete Packing List</div>
+            <div class="packing-grid">
+                <div class="packing-card"><h3>👔 Men's Clothing</h3><ul><li>3-4 swim trunks</li><li>3-4 quick-dry shorts</li><li>2 dinner pants</li><li>5-6 t-shirts</li><li>2-3 collared shirts</li><li>Light rain jacket</li></ul></div>
+                <div class="packing-card"><h3>👗 Women's Clothing</h3><ul><li>3-4 swimsuits</li><li>2 cover-ups</li><li>3-4 shorts</li><li>2 light pants</li><li>3-4 sundresses</li><li>Cardigan (A/C!)</li></ul></div>
+                <div class="packing-card"><h3>👟 Footwear (5 Types!)</h3><ul><li>Hiking boots</li><li>Water shoes</li><li>Tennis shoes</li><li>Flip-flops</li><li>Dinner shoes</li></ul></div>
+                <div class="packing-card"><h3>☀️ Sun Protection</h3><ul><li>Reef-safe SPF 50+</li><li>After-sun aloe</li><li>Sunglasses (2 pairs)</li><li>Wide-brim hat</li><li>Lip balm with SPF</li></ul></div>
+                <div class="packing-card"><h3>🦟 Bug & Rain</h3><ul><li>30% DEET spray</li><li>Light rain jacket</li><li>Small umbrella</li><li>Ziplock bags</li></ul></div>
+                <div class="packing-card"><h3>💵 Documents</h3><ul><li>Passport + copy</li><li>$50 in small bills</li><li>Credit cards</li><li>Travel insurance</li></ul></div>
+            </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(4)">← Previous Chapter</button>
+                <button class="page-turner" onclick="scrollToPage(6)">Next Chapter →</button>
+            </div>
+            <div class="page-number">Page 5</div>
+        </div>
+    </section>
+
+    <section class="page-section info" data-page="6">
+        <div class="page-content">
+            <div class="day-header">Appendix: Resort Guide</div>
+            <div class="packing-grid">
+                <div class="packing-card"><h3>🎯 Resort Tips</h3><ul><li>Request Building 1</li><li>Restaurants close ON TIME</li><li>Book kayaks day before</li><li>Swim on RIGHT side of beach</li><li>Use golf cart for hills</li><li>All drinks/tips included</li></ul></div>
+                <div class="packing-card"><h3>⏰ Restaurant Hours</h3><ul><li>Breakfast: 7:00-10:30 AM</li><li>Lunch: 12:30-3:00 PM</li><li>Dinner: 6:30-9:30 PM</li><li>Pool bar: 10 AM-6 PM</li><li>Lobby bar: 10 AM-11 PM</li></ul></div>
+                <div class="packing-card"><h3>📞 Important Numbers</h3><ul><li>Resort: +506 2690 8000</li><li>Emergency: 911</li><li>Front desk: 24 hours</li><li>WiFi: Available everywhere</li></ul></div>
+                <div class="packing-card"><h3>🌤️ September Weather</h3><ul><li>Morning: Clear, 75-82°F</li><li>Afternoon: Rain 2-5 PM</li><li>Evening: Clear after rain</li><li>Humidity: 86%</li><li>Sunrise: ~5:30 AM</li><li>Sunset: ~5:45 PM</li></ul></div>
+                <div class="packing-card"><h3>🎯 Free Activities</h3><ul><li>Kayaking (book ahead)</li><li>Snorkeling gear</li><li>Water aerobics</li><li>Tennis courts</li><li>Beach volleyball</li><li>Board games</li></ul></div>
+                <div class="packing-card"><h3>✨ Final Reminders</h3><ul><li>Book spa on Day 1</li><li>Reserve restaurants early</li><li>Bring waterproof phone case</li><li>Pack medicines in carry-on</li><li>Notify bank of travel</li><li>Have fun! Pura Vida!</li></ul></div>
+            </div>
+            <div class="page-navigation">
+                <button class="page-turner" onclick="scrollToPage(5)">← Previous Chapter</button>
+                <button class="page-turner" onclick="scrollToPage(0)">Back to Start →</button>
+            </div>
+            <div class="page-number">Page 6</div>
+        </div>
+    </section>
+
+    <script>
+        let currentPage = 0;
+        const totalPages = 7;
+
+        function scrollToPage(pageNum) {
+            const pages = document.querySelectorAll('.page-section');
+            if (pages[pageNum]) {
+                pages[pageNum].scrollIntoView({ behavior: 'smooth' });
             }
-            
-            document.querySelectorAll('.sidebar nav a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').slice(1) === current) {
-                    link.classList.add('active');
+        }
+
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+        const pageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const pageNum = parseInt(entry.target.getAttribute('data-page'));
+                    currentPage = pageNum;
+                    const progress = ((pageNum + 1) / totalPages) * 100;
+                    document.getElementById('progressBar').style.width = progress + '%';
                 }
             });
+        }, observerOptions);
+
+        document.querySelectorAll('.page-section').forEach(section => {
+            pageObserver.observe(section);
         });
+
+        // Mouse wheel navigation
+        let isScrolling = false;
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            isScrolling = true;
+            if (e.deltaY > 0 && currentPage < totalPages - 1) {
+                scrollToPage(currentPage + 1);
+            } else if (e.deltaY < 0 && currentPage > 0) {
+                scrollToPage(currentPage - 1);
+            }
+            setTimeout(() => { isScrolling = false; }, 1000);
+        }, { passive: true });
+        
+        // Touch swipe navigation
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+        document.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].screenY;
+            if (touchEndY < touchStartY - 50 && currentPage < totalPages - 1) {
+                scrollToPage(currentPage + 1);
+            }
+            if (touchEndY > touchStartY + 50 && currentPage > 0) {
+                scrollToPage(currentPage - 1);
+            }
+        });
+
     </script>
 </body>
 </html>
